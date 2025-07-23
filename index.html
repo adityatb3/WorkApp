@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StartSmart - Professional Career Development Platform</title>
+  <script src="https://unpkg.com/feather-icons"></script>
+  <link href="style.css" rel="stylesheet">
+</head>
+
+<body>
+  <div class="navbar">
+    <button class="nav-btn" onclick="showProfile()">
+      <i data-feather="user"></i>
+      Profile
+    </button>
+  </div>
+
+  <div class="container">
+    <div class="header">
+      <h1>StartSmart</h1>
+      <p>Connect, Learn, and Grow in Your Professional Journey</p>
+
+    </div>
+
+    <div class="search-section">
+      <h2 style="margin-bottom: 20px; text-align: center;">Explore Career Fields</h2>
+      <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="Search career fields, skills, or topics...">
+        <button class="btn btn-primary" onclick="searchCareers()">
+          <i data-feather="search"></i>
+          Search
+        </button>
+      </div>
+    </div>
+
+    <div class="career-grid" id="careerGrid">
+    </div>
+  </div>
+
+  <div id="careerModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2 id="modalTitle">Career Field</h2>
+        <p id="modalSubtitle">Explore opportunities and connect with professionals</p>
+      </div>
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('posts')">
+          <i data-feather="message-square"></i>
+          Discussions
+        </button>
+        <button class="tab" onclick="switchTab('resources')">
+          <i data-feather="book"></i>
+          Resources
+        </button>
+        <button class="tab" onclick="switchTab('skills')">
+          <i data-feather="target"></i>
+          Skills
+        </button>
+        <button class="tab" onclick="switchTab('mentors')">
+          <i data-feather="users"></i>
+          Mentors
+        </button>
+      </div>
+
+      <div id="posts-content" class="tab-content active">
+        <div class="create-post">
+          <h3>Share Your Knowledge or Ask a Question</h3>
+          <div class="form-group">
+            <label>Post Type</label>
+            <select id="postType" onchange="updatePostForm()">
+              <option value="question">Question</option>
+              <option value="article">Article</option>
+              <option value="tutorial">Tutorial</option>
+              <option value="experience">Experience</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Title</label>
+            <input type="text" id="postTitle" placeholder="Enter your post title">
+          </div>
+          <div class="form-group">
+            <label>Content</label>
+            <textarea id="postContent" placeholder="Share your thoughts, questions, or knowledge..."></textarea>
+          </div>
+          <div class="form-group">
+            <label>Related Skills</label>
+            <input type="text" id="postSkills" placeholder="Topics you need help with (comma-separated)">
+          </div>
+          <button class="btn btn-primary" onclick="createPost()">
+            <i data-feather="send"></i>
+            Publish Post
+          </button>
+        </div>
+
+        <div id="postsContainer">
+          
+        </div>
+      </div>
+
+
+      <div id="resources-content" class="tab-content">
+        <div id="resourcesContainer">
+        
+        </div>
+      </div>
+
+      <div id="skills-content" class="tab-content">
+        <div id="skillsContainer">
+         
+        </div>
+      </div>
+
+ 
+      <div id="mentors-content" class="tab-content">
+        <div id="mentorsContainer">
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="profileModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="close" onclick="closeProfileModal()">&times;</span>
+        <h2>Your Profile</h2>
+        <p>Manage your professional information</p>
+      </div>
+      <div style="padding: 30px;">
+        <div class="profile-section">
+          <div class="profile-avatar" id="profileAvatar">JS</div>
+          <h2 id="profileName">John Smith</h2>
+          <p id="profileTitle">Software Engineer</p>
+          <div class="skills-list" id="profileSkills">
+            
+          </div>
+        </div>
+
+        <h3 style="margin-bottom: 20px;">Update Information</h3>
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" id="updateName" placeholder="Your full name">
+        </div>
+        <div class="form-group">
+          <label>Professional Title</label>
+          <input type="text" id="updateTitle" placeholder="Your job title or desired role">
+        </div>
+        <div class="form-group">
+          <label>Skills</label>
+          <input type="text" id="updateSkills" placeholder="Your skills (comma-separated)">
+        </div>
+        <div class="form-group">
+          <label>Experience Level</label>
+          <select id="updateExperience">
+            <option value="entry">Entry Level (0-2 years)</option>
+            <option value="mid">Mid Level (3-7 years)</option>
+            <option value="senior">Senior Level (8+ years)</option>
+            <option value="expert">Expert/Mentor (10+ years)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Role</label>
+          <select id="updateRole" onchange="handleRoleChange()">
+            <option value="student">Student</option>
+            <option value="teacher">Teacher/Professional</option>
+          </select>
+        </div>
+        <div class="form-group" id="expertiseFieldGroup" style="display: none;">
+          <label>Field of Expertise</label>
+          <select id="updateExpertiseField">
+            
+          </select>
+        </div>
+        <button class="btn btn-primary" onclick="updateProfile()">
+          <i data-feather="save"></i>
+          Update Profile
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="roleModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Choose Your Role</h2>
+        <p>How would you like to use CareerPath?</p>
+      </div>
+      <div style="padding: 30px;">
+        <div class="role-selection">
+          <div class="role-card" onclick="selectRole('student')">
+            <div style="font-size: 3rem; margin-bottom: 20px;">🎓</div>
+            <h3>Student</h3>
+            <p>Learn from professionals and grow your career</p>
+            <ul>
+              <li>Ask questions and get expert advice</li>
+              <li>Access learning resources and tutorials</li>
+              <li>Connect with mentors in your field</li>
+              <li>Track your skill development</li>
+            </ul>
+          </div>
+
+          <div class="role-card" onclick="selectRole('teacher')">
+            <div style="font-size: 3rem; margin-bottom: 20px;">👨‍🏫</div>
+            <h3>Teacher/Professional</h3>
+            <p>Share your expertise and guide others</p>
+            <ul>
+              <li>Answer questions in your field</li>
+              <li>Share tutorials and resources</li>
+              <li>Mentor aspiring professionals</li>
+              <li>Build your professional reputation</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+ 
+  <div id="teacherFieldModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="close" onclick="document.getElementById('teacherFieldModal').style.display = 'none'">&times;</span>
+        <h2>Select Your Field of Expertise</h2>
+        <p>Choose the career field where you can mentor others</p>
+      </div>
+      <div style="padding: 30px;">
+        <div class="career-grid" id="teacherFieldGrid">
+          
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <script src="script.js"></script>
+</body>
+
+</html>
