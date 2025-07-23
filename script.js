@@ -509,7 +509,7 @@ function showMembers(fieldId) {
 
 
 function contactMember(memberName) {
-  alert('You can now reach out to ' + memberName + ' for help! In a real app, this would open a messaging system.');
+  showToast('You can now reach out to ' + memberName + ' for help! In a real app, this would open a messaging system.', 'info', 'Contact Member');
 }
 
 function openCareerField(fieldId) {
