@@ -658,3 +658,15 @@
     .toast.sliding-out {
       animation: slideOut 0.3s ease;
     }
+
+
+    .expertise-field {
+      border: 3px solid #667eea !important;
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2) !important;
+      transform: scale(1.02);
+    }
+
+    .expertise-field:hover {
+      transform: scale(1.05) !important;
+      box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3) !important;
+    }
