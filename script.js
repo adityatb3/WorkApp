@@ -79,23 +79,7 @@ samplePosts['software-engineering'] = [
     skills: ['JavaScript', 'React', 'Career Transition'],
     likes: 23,
     comments: 8,
-    timestamp: '2 hours ago',
-    replies: [
-      {
-        id: 101,
-        content: 'Great question! Since you already know JavaScript, I\'d recommend starting with Node.js for the backend. It allows you to use the same language on both frontend and backend. After that, learn Express.js for building APIs and MongoDB for database management. This stack will give you a solid foundation.',
-        author: 'Mike Rodriguez',
-        isTeacher: true,
-        timestamp: '1 hour ago'
-      },
-      {
-        id: 102,
-        content: 'I agree with Mike! Also consider learning about REST APIs, authentication (JWT), and basic DevOps concepts like Docker. These are essential skills that employers look for in full-stack developers. Feel free to reach out if you need specific learning resources!',
-        author: 'Jennifer Liu',
-        isTeacher: true,
-        timestamp: '45 minutes ago'
-      }
-    ]
+    timestamp: '2 hours ago'
   },
   {
     id: 2,
@@ -490,7 +474,6 @@ function showMembers(fieldId) {
       }
     ];
   } else {
-    // Default members for any other fields
     sampleMembers = [
       {
         name: 'Professional A',
@@ -502,7 +485,6 @@ function showMembers(fieldId) {
     ];
   }
 
-  // Create the members list HTML
   var membersHTML = '<h3>Members in ' + field.title + '</h3>';
   membersHTML += '<p>Click on any member to reach out for help with their skills!</p>';
 
@@ -530,11 +512,9 @@ function showMembers(fieldId) {
     membersHTML += '</div>';
   }
 
-  // Show this in a simple alert for now (in a real app, this would be a proper modal)
   var membersList = document.createElement('div');
   membersList.innerHTML = membersHTML;
 
-  // Create a simple modal to show members
   var modal = document.createElement('div');
   modal.style.position = 'fixed';
   modal.style.top = '0';
@@ -573,12 +553,10 @@ function showMembers(fieldId) {
   document.body.appendChild(modal);
 }
 
-// Function to contact a member
 function contactMember(memberName) {
   showToast('You can now reach out to ' + memberName + ' for help! In a real app, this would open a messaging system.', 'info', 'Contact Member');
 }
 
-// Function to create a new skill (for teachers)
 function createSkill(fieldId) {
   var skillName = document.getElementById('skillName').value;
   var skillLevel = document.getElementById('skillLevel').value;
@@ -586,19 +564,16 @@ function createSkill(fieldId) {
   var skillResources = document.getElementById('skillResources').value;
   var skillPrerequisites = document.getElementById('skillPrerequisites').value;
 
-  // Validate required fields
   if (!skillName || !skillDescription) {
     showToast('Please fill in the skill name and description to create your learning content.', 'warning', 'Missing Information');
     return;
   }
 
-  // Only teachers in their expertise field can add skills
   if (currentUser.role !== 'teacher' || currentUser.expertiseField !== fieldId) {
     showToast('Only teachers can add skills to their field of expertise.', 'error', 'Access Denied');
     return;
   }
 
-  // Create new skill object
   var newSkill = {
     name: skillName,
     level: skillLevel,
@@ -610,7 +585,6 @@ function createSkill(fieldId) {
     timestamp: 'Just now'
   };
 
-  // Process prerequisites
   if (skillPrerequisites) {
     var prereqArray = skillPrerequisites.split(',');
     for (var i = 0; i < prereqArray.length; i++) {
@@ -621,18 +595,14 @@ function createSkill(fieldId) {
     }
   }
 
-  // Initialize skills array if it doesn't exist
   if (!sampleSkills[fieldId]) {
     sampleSkills[fieldId] = [];
   }
 
-  // Add new skill to the beginning of the array
   sampleSkills[fieldId].unshift(newSkill);
 
-  // Reload the skills tab
   loadSkills(fieldId);
 
-  // Clear the form
   document.getElementById('skillName').value = '';
   document.getElementById('skillDescription').value = '';
   document.getElementById('skillResources').value = '';
@@ -641,14 +611,13 @@ function createSkill(fieldId) {
   showToast('Your skill has been shared successfully! Students can now learn from your expertise.', 'success', 'Skill Shared');
 }
 
-// Function to add skill to student profile
 function addSkillToProfile(skillName) {
   if (currentUser.role !== 'student') {
     showToast('Only students can add skills to their learning profile.', 'warning', 'Feature for Students');
     return;
   }
 
-  // Check if skill is already in profile
+
   for (var i = 0; i < currentUser.skills.length; i++) {
     if (currentUser.skills[i] === skillName) {
       showToast('This skill is already in your profile!', 'info', 'Already Added');
@@ -656,14 +625,13 @@ function addSkillToProfile(skillName) {
     }
   }
 
-  // Add skill to user profile
+
   currentUser.skills.push(skillName);
   updateProfileDisplay();
 
   showToast('Skill "' + skillName + '" added to your profile! Keep learning and growing.', 'success', 'Skill Added');
 }
 
-// Function to start learning a skill
 function startLearning(skillName) {
   if (currentUser.role !== 'student') {
     showToast('This feature is designed for students to track their learning progress.', 'info', 'Learning Feature');
@@ -681,13 +649,11 @@ function startLearning(skillName) {
   
   showToast(randomMessage + ' In a real app, this would track your progress and provide learning materials.', 'success', 'Learning Started');
   
-  // Add to profile if not already there
   setTimeout(function() {
     addSkillToProfile(skillName);
   }, 1000);
 }
 
-// Function to contact a mentor about a specific skill
 function contactMentor(mentorName) {
   if (currentUser.role !== 'student') {
     showToast('Students can reach out to mentors for guidance and support.', 'info', 'Mentoring Feature');
@@ -697,9 +663,7 @@ function contactMentor(mentorName) {
   showToast('You can now ask ' + mentorName + ' for guidance on this skill! In a real app, this would open a direct messaging system with the mentor.', 'info', 'Contact Mentor');
 }
 
-// Function to open a specific career field modal
 function openCareerField(fieldId) {
-  // Find the career field information
   var field = null;
   for (var i = 0; i < careerFields.length; i++) {
     if (careerFields[i].id === fieldId) {
@@ -710,24 +674,22 @@ function openCareerField(fieldId) {
 
   if (!field) return;
 
-  // Update the modal title and subtitle
   document.getElementById('modalTitle').innerHTML = field.title;
   document.getElementById('modalSubtitle').innerHTML = field.description;
 
-  // Show the modal
   document.getElementById('careerModal').style.display = 'block';
 
-  // Load content for each tab
+ 
   loadPosts(fieldId);
   loadResources(fieldId);
   loadSkills(fieldId);
   loadMentors(fieldId);
 
-  // Make sure we start on the first tab
+  
   switchTab('posts');
 }
 
-// Function to load posts for a career field
+
 function loadPosts(fieldId) {
   var posts = samplePosts[fieldId] || [];
   var container = document.getElementById('postsContainer');
@@ -782,7 +744,6 @@ function loadPosts(fieldId) {
     }
     postsHTML += '</div>';
     
-    // Add reply form for teachers (initially hidden)
     if (currentUser.role === 'teacher') {
       postsHTML += '<div id="replyForm-' + post.id + '" class="reply-form" style="display: none; margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 10px; border-left: 4px solid #28a745;">';
       postsHTML += '<h4 style="margin-bottom: 10px; color: #28a745;"><i data-feather="user-check" style="width: 16px; height: 16px; margin-right: 5px;"></i>Teacher Response</h4>';
@@ -800,39 +761,16 @@ function loadPosts(fieldId) {
       postsHTML += '</div>';
     }
     
-    // Add existing replies display
-    if (post.replies && post.replies.length > 0) {
-      postsHTML += '<div class="replies-container" style="margin-top: 20px; padding-left: 20px; border-left: 2px solid #e0e0e0;">';
-      postsHTML += '<h4 style="margin-bottom: 15px; color: #666; font-size: 14px;"><i data-feather="corner-down-right" style="width: 14px; height: 14px; margin-right: 5px;"></i>' + post.replies.length + ' Response' + (post.replies.length > 1 ? 's' : '') + '</h4>';
-      for (var k = 0; k < post.replies.length; k++) {
-        var reply = post.replies[k];
-        postsHTML += '<div class="reply" style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 3px solid #28a745;">';
-        postsHTML += '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">';
-        postsHTML += '<div>';
-        postsHTML += '<span style="font-weight: 600; color: #333;">' + reply.author + '</span>';
-        if (reply.isTeacher) {
-          postsHTML += '<span class="mentor-badge" style="margin-left: 8px;"><i data-feather="award" style="width: 10px; height: 10px;"></i>Teacher</span>';
-        }
-        postsHTML += '<span style="color: #999; margin-left: 10px; font-size: 12px;">' + reply.timestamp + '</span>';
-        postsHTML += '</div>';
-        postsHTML += '</div>';
-        postsHTML += '<p style="color: #555; line-height: 1.5; margin: 0;">' + reply.content + '</p>';
-        postsHTML += '</div>';
-      }
-      postsHTML += '</div>';
-    }
-    postsHTML += '</div>';
+   postsHTML += '</div>';
   }
 
   container.innerHTML = postsHTML;
   feather.replace();
 }
 
-// Function to load resources for a career field
 function loadResources(fieldId) {
   var container = document.getElementById('resourcesContainer');
 
-  // Sample resources (same for all fields for simplicity)
   var resources = [
     {
       title: 'Complete Learning Path',
@@ -892,14 +830,12 @@ function loadResources(fieldId) {
   feather.replace();
 }
 
-// Function to load skills for a career field
 function loadSkills(fieldId) {
   var skills = sampleSkills[fieldId] || [];
   var container = document.getElementById('skillsContainer');
 
   var skillsHTML = '';
 
-  // Add skill creation form for teachers
   if (currentUser.role === 'teacher') {
     skillsHTML += '<div class="create-post" style="border-left: 4px solid #dc3545;">';
     skillsHTML += '<h3><i data-feather="plus" style="width: 20px; height: 20px; margin-right: 8px;"></i>Share Your Expertise</h3>';
@@ -936,7 +872,6 @@ function loadSkills(fieldId) {
     skillsHTML += '</div>';
   }
 
-  // Display existing skills
   for (var i = 0; i < skills.length; i++) {
     var skill = skills[i];
 
@@ -1008,7 +943,6 @@ function loadSkills(fieldId) {
   feather.replace();
 }
 
-// Function to load mentors for a career field
 function loadMentors(fieldId) {
   var mentors = sampleMentors[fieldId] || [];
   var container = document.getElementById('mentorsContainer');
@@ -1060,45 +994,37 @@ function loadMentors(fieldId) {
   feather.replace();
 }
 
-// Function to switch between tabs in the modal
 function switchTab(tabName) {
-  // Get all tab buttons and remove the 'active' class
   var tabs = document.querySelectorAll('.tab');
   for (var i = 0; i < tabs.length; i++) {
     tabs[i].classList.remove('active');
   }
 
-  // Get all tab content areas and hide them
   var contents = document.querySelectorAll('.tab-content');
   for (var i = 0; i < contents.length; i++) {
     contents[i].classList.remove('active');
   }
 
-  // Find which tab was clicked and make it active
   var clickedTab = event.target;
   clickedTab.classList.add('active');
 
-  // Show the corresponding content
   var contentToShow = document.getElementById(tabName + '-content');
   contentToShow.classList.add('active');
 }
 
-// Function to create a new post
 function createPost() {
   var type = document.getElementById('postType').value;
   var title = document.getElementById('postTitle').value;
   var content = document.getElementById('postContent').value;
   var skills = document.getElementById('postSkills').value;
 
-  // Check if required fields are filled
   if (!title || !content) {
     showToast('Please fill in both title and content to create your post.', 'warning', 'Missing Information');
     return;
   }
-
-  // Create a new post object
+  
   var newPost = {
-    id: Date.now(), // Use current timestamp as unique ID
+    id: Date.now(), 
     type: type,
     title: title,
     content: content,
@@ -1110,7 +1036,6 @@ function createPost() {
     timestamp: 'Just now'
   };
 
-  // Convert skills string to array
   if (skills) {
     var skillsArray = skills.split(',');
     for (var i = 0; i < skillsArray.length; i++) {
@@ -1121,16 +1046,15 @@ function createPost() {
     }
   }
 
-  // Add to software-engineering posts (for demo purposes)
   if (!samplePosts['software-engineering']) {
     samplePosts['software-engineering'] = [];
   }
-  samplePosts['software-engineering'].unshift(newPost); // Add to beginning of array
+  samplePosts['software-engineering'].unshift(newPost);
 
-  // Reload the posts
+
   loadPosts('software-engineering');
 
-  // Clear the form
+  
   document.getElementById('postTitle').value = '';
   document.getElementById('postContent').value = '';
   document.getElementById('postSkills').value = '';
@@ -1138,7 +1062,6 @@ function createPost() {
   showToast('Your post has been published successfully!', 'success', 'Post Created');
 }
 
-// Function to update the post form based on post type
 function updatePostForm() {
   var type = document.getElementById('postType').value;
   var postSkills = document.getElementById('postSkills');
@@ -1154,17 +1077,14 @@ function updatePostForm() {
   }
 }
 
-// Function to close the career modal
 function closeModal() {
   document.getElementById('careerModal').style.display = 'none';
 }
 
-// Function to show the user profile
 function showProfile() {
   document.getElementById('profileModal').style.display = 'block';
   updateProfileDisplay();
 
-  // Fill form fields with current values
   if (currentUser.role) {
     document.getElementById('updateRole').value = currentUser.role;
     handleRoleChange();
@@ -1174,12 +1094,10 @@ function showProfile() {
   }
 }
 
-// Function to close the profile modal
 function closeProfileModal() {
   document.getElementById('profileModal').style.display = 'none';
 }
 
-// Function to update the profile display
 function updateProfileDisplay() {
   document.getElementById('profileName').innerHTML = currentUser.name;
 
@@ -1192,7 +1110,6 @@ function updateProfileDisplay() {
 
   document.getElementById('profileTitle').innerHTML = titleHTML;
 
-  // Create initials for avatar
   var nameParts = currentUser.name.split(' ');
   var initials = '';
   for (var i = 0; i < nameParts.length; i++) {
@@ -1200,7 +1117,6 @@ function updateProfileDisplay() {
   }
   document.getElementById('profileAvatar').innerHTML = initials;
 
-  // Update skills display
   var skillsContainer = document.getElementById('profileSkills');
   var skillsHTML = '';
   for (var i = 0; i < currentUser.skills.length; i++) {
@@ -1211,7 +1127,6 @@ function updateProfileDisplay() {
   feather.replace();
 }
 
-// Function to handle role change in profile form
 function handleRoleChange() {
   var role = document.getElementById('updateRole').value;
   var expertiseFieldGroup = document.getElementById('expertiseFieldGroup');
@@ -1223,7 +1138,6 @@ function handleRoleChange() {
   }
 }
 
-// Function to update user profile
 function updateProfile() {
   var name = document.getElementById('updateName').value;
   var title = document.getElementById('updateTitle').value;
@@ -1232,14 +1146,12 @@ function updateProfile() {
   var role = document.getElementById('updateRole').value;
   var expertiseField = document.getElementById('updateExpertiseField').value;
 
-  // Update user information if fields are filled
   if (name) currentUser.name = name;
   if (title) currentUser.title = title;
   if (experience) currentUser.experience = experience;
   if (role) currentUser.role = role;
   if (role === 'teacher' && expertiseField) currentUser.expertiseField = expertiseField;
 
-  // Update skills
   if (skills) {
     currentUser.skills = [];
     var skillsArray = skills.split(',');
@@ -1253,7 +1165,6 @@ function updateProfile() {
 
   updateProfileDisplay();
 
-  // Clear form fields
   document.getElementById('updateName').value = '';
   document.getElementById('updateTitle').value = '';
   document.getElementById('updateSkills').value = '';
@@ -1261,9 +1172,7 @@ function updateProfile() {
   showToast('Your profile has been updated successfully!', 'success', 'Profile Updated');
 }
 
-// Function to like a post
 function likePost(postId) {
-  // Find the post and increase its likes
   var found = false;
   for (var fieldId in samplePosts) {
     var posts = samplePosts[fieldId];
@@ -1279,17 +1188,14 @@ function likePost(postId) {
   }
 }
 
-// Function to show comments (placeholder)
 function showComments(postId) {
   showToast('Comments feature coming soon! This would open a detailed view with comments and replies.', 'info', 'Coming Soon');
 }
 
-// Function to share a post (placeholder)
 function sharePost(postId) {
   showToast('Post shared to your network!', 'success', 'Shared');
 }
 
-// Function to toggle reply form visibility
 function toggleReplyForm(postId) {
   if (currentUser.role !== 'teacher') {
     showToast('Only teachers can reply to posts to share their expertise.', 'warning', 'Teacher Feature');
@@ -1306,7 +1212,6 @@ function toggleReplyForm(postId) {
   feather.replace();
 }
 
-// Function to submit a reply
 function submitReply(postId) {
   if (currentUser.role !== 'teacher') {
     showToast('Only teachers can reply to posts.', 'error', 'Access Denied');
@@ -1319,7 +1224,6 @@ function submitReply(postId) {
     return;
   }
 
-  // Find the post and add the reply
   var postFound = false;
   var currentFieldId = null;
   
@@ -1329,12 +1233,11 @@ function submitReply(postId) {
       if (posts[i].id === postId) {
         currentFieldId = fieldId;
         
-        // Initialize replies array if it doesn't exist
+        
         if (!posts[i].replies) {
           posts[i].replies = [];
         }
         
-        // Create new reply object
         var newReply = {
           id: Date.now(),
           content: replyContent,
@@ -1343,9 +1246,8 @@ function submitReply(postId) {
           timestamp: 'Just now'
         };
         
-        // Add reply to the post
         posts[i].replies.push(newReply);
-        posts[i].comments += 1; // Increment comment count
+        posts[i].comments += 1; 
         postFound = true;
         break;
       }
@@ -1354,7 +1256,6 @@ function submitReply(postId) {
   }
 
   if (postFound && currentFieldId) {
-    // Reload the posts to show the new reply
     loadPosts(currentFieldId);
     showToast('Your expert response has been posted successfully!', 'success', 'Reply Posted');
   } else {
@@ -1362,7 +1263,6 @@ function submitReply(postId) {
   }
 }
 
-// Function to cancel reply
 function cancelReply(postId) {
   var replyForm = document.getElementById('replyForm-' + postId);
   var replyContent = document.getElementById('replyContent-' + postId);
@@ -1371,22 +1271,8 @@ function cancelReply(postId) {
   replyContent.value = '';
 }
 
-// Function to show help information
-function showHelp() {
-  var helpMessage = 'Welcome to CareerPath! Here\'s how to get started:\n\n';
-  helpMessage += '1. Browse career fields by clicking on any card\n';
-  helpMessage += '2. Join discussions by asking questions or sharing knowledge\n';
-  helpMessage += '3. Find learning resources and essential skills for each field\n';
-  helpMessage += '4. Connect with mentors who can guide your career journey\n';
-  helpMessage += '5. Update your profile to showcase your skills and experience\n\n';
-  helpMessage += 'This platform helps you achieve UN Sustainable Development Goal 8: ';
-  helpMessage += 'Decent Work and Economic Growth by connecting you with professionals ';
-  helpMessage += 'and resources in your field of interest.';
 
-  alert(helpMessage);
-}
 
-// Function to handle clicking outside modals
 function handleModalClick(event) {
   var careerModal = document.getElementById('careerModal');
   var profileModal = document.getElementById('profileModal');
@@ -1407,12 +1293,11 @@ function handleModalClick(event) {
   }
 }
 
-// Function to show role selection modal
 function showRoleModal() {
   document.getElementById('roleModal').style.display = 'block';
 }
 
-// Function to select user role
+
 function selectRole(role) {
   currentUser.role = role;
   document.getElementById('roleModal').style.display = 'none';
@@ -1424,7 +1309,7 @@ function selectRole(role) {
   }
 }
 
-// Function to show teacher field selection
+
 function showTeacherFieldSelection() {
   var grid = document.getElementById('teacherFieldGrid');
   grid.innerHTML = '';
@@ -1451,7 +1336,7 @@ function showTeacherFieldSelection() {
   feather.replace();
 }
 
-// Function to select teacher field
+
 function selectTeacherField(fieldId) {
   var field = null;
   for (var i = 0; i < careerFields.length; i++) {
@@ -1470,7 +1355,6 @@ function selectTeacherField(fieldId) {
   completeRoleSetup();
 }
 
-// Function to complete role setup
 function completeRoleSetup() {
   updateProfileDisplay();
 
@@ -1495,28 +1379,23 @@ function completeRoleSetup() {
   showToast(welcomeMessage, 'success', 'Welcome to CareerPath!', 8000);
 }
 
-// Function to handle Enter key in search
 function handleSearchEnter(event) {
   if (event.key === 'Enter') {
     searchCareers();
   }
 }
 
-// Toast notification system
 function showToast(message, type = 'info', title = null, duration = 5000) {
   var container = document.getElementById('toastContainer');
 
-  // Create toast element
   var toast = document.createElement('div');
   toast.className = 'toast ' + type;
 
-  // Set icon based on type
   var iconName = 'info';
   if (type === 'success') iconName = 'check-circle';
   else if (type === 'error') iconName = 'x-circle';
   else if (type === 'warning') iconName = 'alert-triangle';
 
-  // Build toast content
   var toastHTML = '<div class="toast-icon"><i data-feather="' + iconName + '"></i></div>';
   toastHTML += '<div class="toast-content">';
   if (title) {
@@ -1528,21 +1407,17 @@ function showToast(message, type = 'info', title = null, duration = 5000) {
 
   toast.innerHTML = toastHTML;
 
-  // Add click to close functionality
   toast.onclick = function(event) {
     if (event.target.classList.contains('toast-close')) {
-      return; // Let the close button handle it
+      return; 
     }
     closeToast(toast.querySelector('.toast-close'));
   };
 
-  // Add to container
   container.appendChild(toast);
 
-  // Initialize feather icons
   feather.replace();
 
-  // Auto-remove after duration
   if (duration > 0) {
     setTimeout(function() {
       closeToast(toast.querySelector('.toast-close'));
@@ -1563,11 +1438,9 @@ function closeToast(closeButton) {
   }, 300);
 }
 
-// Set up event listeners when the page loads
 document.addEventListener('DOMContentLoaded', startApp);
 window.onclick = handleModalClick;
 
-// Add Enter key listener to search input
 setTimeout(function() {
   var searchInput = document.getElementById('searchInput');
   if (searchInput) {
