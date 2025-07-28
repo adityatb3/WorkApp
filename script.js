@@ -501,7 +501,7 @@ function showMembers(fieldId) {
     membersHTML += '</div>';
     membersHTML += '<div class="post-content">';
     membersHTML += '<h3>' + member.title + '</h3>';
-    membersHTML += '<p><strong>Can help with:</strong> ' + member.canHelp.join(', ') + '</p>';
+    membersHTML += '<p><strong>Skills:</strong> ' + member.canHelp.join(', ') + '</p>';
     membersHTML += '<div class="skills-list">';
     for (var j = 0; j < member.skills.length; j++) {
       membersHTML += '<span class="skill-tag">' + member.skills[j] + '</span>';
@@ -689,6 +689,16 @@ function openCareerField(fieldId) {
   switchTab('posts');
 }
 
+function getCurrentFieldFromModal() {
+  var modalTitle = document.getElementById('modalTitle').textContent;
+  for (var i = 0; i < careerFields.length; i++) {
+    if (careerFields[i].title === modalTitle) {
+      return careerFields[i].id;
+    }
+  }
+  return null;
+}
+
 
 function loadPosts(fieldId) {
   var posts = samplePosts[fieldId] || [];
@@ -736,7 +746,7 @@ function loadPosts(fieldId) {
     postsHTML += '<i data-feather="share-2" style="width: 16px; height: 16px;"></i>';
     postsHTML += '<span>Share</span>';
     postsHTML += '</div>';
-    if (currentUser.role === 'teacher') {
+    if (currentUser.role === 'teacher' && currentUser.expertiseField === fieldId) {
       postsHTML += '<div class="stat" onclick="toggleReplyForm(' + post.id + ')" style="margin-left: auto;">';
       postsHTML += '<i data-feather="message-square" style="width: 16px; height: 16px;"></i>';
       postsHTML += '<span>Reply</span>';
@@ -744,7 +754,7 @@ function loadPosts(fieldId) {
     }
     postsHTML += '</div>';
     
-    if (currentUser.role === 'teacher') {
+    if (currentUser.role === 'teacher' && currentUser.expertiseField === fieldId) {
       postsHTML += '<div id="replyForm-' + post.id + '" class="reply-form" style="display: none; margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 10px; border-left: 4px solid #28a745;">';
       postsHTML += '<h4 style="margin-bottom: 10px; color: #28a745;"><i data-feather="user-check" style="width: 16px; height: 16px; margin-right: 5px;"></i>Teacher Response</h4>';
       postsHTML += '<textarea id="replyContent-' + post.id + '" placeholder="Share your expertise, answer questions, or provide guidance..." style="width: 100%; min-height: 80px; padding: 10px; border: 1px solid #ddd; border-radius: 8px; resize: vertical; margin-bottom: 10px;"></textarea>';
@@ -1202,6 +1212,12 @@ function toggleReplyForm(postId) {
     return;
   }
 
+  var currentFieldId = getCurrentFieldFromModal();
+  if (!currentUser.expertiseField || currentUser.expertiseField !== currentFieldId) {
+    showToast('You can only reply to posts in your field of expertise.', 'warning', 'Field Restriction');
+    return;
+  }
+
   var replyForm = document.getElementById('replyForm-' + postId);
   if (replyForm.style.display === 'none') {
     replyForm.style.display = 'block';
@@ -1215,6 +1231,12 @@ function toggleReplyForm(postId) {
 function submitReply(postId) {
   if (currentUser.role !== 'teacher') {
     showToast('Only teachers can reply to posts.', 'error', 'Access Denied');
+    return;
+  }
+
+  var currentFieldId = getCurrentFieldFromModal();
+  if (!currentUser.expertiseField || currentUser.expertiseField !== currentFieldId) {
+    showToast('You can only reply to posts in your field of expertise.', 'error', 'Field Restriction');
     return;
   }
 
